@@ -1,6 +1,7 @@
 ## TODO
 
 [ ] Basic working(subprocess)
+[ ] Correct ps output formatting
 [ ] Creating basic language templates/operations
   [ ] select (It will always be select, nothing else. Might as well ignore it)
   [ ] from <table> (Not required, although can be added)
