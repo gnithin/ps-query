@@ -1,6 +1,10 @@
 ## TODO
 
-[ ] Basic working(subprocess)
+[x] Basic working(subprocess)
+[ ] Create working classes
+  [ ] Create static class for logic
+  [ ] Create class for presentation
+  [ ] Document why
 [ ] Correct ps output formatting
 [ ] Creating basic language templates/operations
   [ ] select (It will always be select, nothing else. Might as well ignore it)
