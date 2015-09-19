@@ -2,11 +2,21 @@
 import subprocess
 import json
 
+
 class ps_sqlify:
     @classmethod
     def __get_container_full_details(cls, args = "a"):
         '''
-        Gets all the container details
+        Get the container details in JSON format (from docker inspect)
+
+        Parameters:
+            *args
+                Optional argument that will be used to get the information that the docker command needs.
+                Default value is `a`.
+                The acceptable values that will be interpreted are - a,l
+
+        Returns:
+            A list of dicts output of the docker inspect command.
         '''
         acceptable_args = "qal"
         prefix_args = "q"
@@ -40,6 +50,15 @@ class ps_sqlify:
     
     @classmethod
     def __purge_container_details(cls, container_details):
+        '''
+        Purges the docker inspect output of the unnecessary values.
+        Parameters:
+            container_details
+                This is a list of dicts, which is represented by the output of `docker inspect`.
+
+        Returns:
+            List of dicts output with only the important properties
+        '''
         # Helper function #1
         def get_keys(ip_dict, key):
             dict_val = ip_dict
@@ -85,11 +104,20 @@ class ps_sqlify:
         return new_container_details
 
     @classmethod
-    def get_container_details(cls, arg_list):
-        all_det = cls.__get_container_full_details(arg_list)
+    def get_container_details(cls, arg_str):
+        '''
+        Get the relavant container details
+
+        Parameters:
+            arg_str
+                A string representing the input arguments needed for docker ps output
+
+        Returns:
+            A List of dicts that are relavant
+        '''
+        all_det = cls.__get_container_full_details(arg_str)
         purged_det = cls.__purge_container_details(all_det)
         return purged_det
-
 
 if __name__ == "__main__":
     arg_list = "l"
