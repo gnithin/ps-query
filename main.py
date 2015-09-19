@@ -4,6 +4,10 @@ import json
 
 
 class ps_sqlify:
+    # Static properties
+    container_data  = []
+    purged_data     = []
+
     @classmethod
     def __get_container_full_details(cls, args = "a"):
         '''
@@ -104,7 +108,7 @@ class ps_sqlify:
         return new_container_details
 
     @classmethod
-    def get_container_details(cls, arg_str):
+    def get_container_details(cls, arg_str, query_str=""):
         '''
         Get the relavant container details
 
@@ -115,9 +119,13 @@ class ps_sqlify:
         Returns:
             A List of dicts that are relavant
         '''
-        all_det = cls.__get_container_full_details(arg_str)
-        purged_det = cls.__purge_container_details(all_det)
-        return purged_det
+        cls.container_data = cls.__get_container_full_details(arg_str)
+        cls.purged_data = cls.__purge_container_details(
+                cls.container_data
+                )
+
+        # Get data according to the query string
+        return cls.purged_data
 
 if __name__ == "__main__":
     arg_list = "l"
