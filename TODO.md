@@ -4,11 +4,35 @@
 - [ ] Create working classes
   - [x] Create static class for logic
   - [ ] Create class for presentation
-  - [ ] Document why
 - [ ] Store entries for image-data as well.(Even they need to be searchable)
 - [ ] Create basic logic for different scenarios
 - [ ] Correct ps output formatting
 - [ ] Create click support
+
+- [ ] Create mongodb-like querying syntax
+  - [ ] Comaparision
+    - [ ] $eq
+    - [ ] $ne
+    - [ ] $gt
+    - [ ] $gte
+    - [ ] $lt
+    - [ ] $lte
+    - [ ] $in
+    - [ ] $nin
+  - [ ] Logical
+    - [ ] $or
+    - [ ] $and
+    - [ ] $not
+    - [ ] $nor
+  - [ ] Other functions
+    - [ ] $regex
+    - [ ] $group
+    - [ ] $sum
+    - [ ] $avg
+    - [ ] $first
+    - [ ] $max
+    - [ ] $min
+
 - [ ] Creating basic language templates/operations
   - [ ] select (It will always be select, nothing else. Might as well ignore it)
   - [ ] from <table> (Not required, although can be added)
