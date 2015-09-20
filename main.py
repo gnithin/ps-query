@@ -1,9 +1,9 @@
-#!/user/bin/env python
+#!/usr/bin/env python
 import subprocess
 import json
 
 
-class ps_sqlify:
+class ps_query:
     # Static properties
     container_data  = []
     purged_data     = []
@@ -124,11 +124,30 @@ class ps_sqlify:
                 cls.container_data
                 )
 
-        # Get data according to the query string
-        return cls.purged_data
+        qry_data = cls.__get_query_data(cls.purged_data, query_str)
+
+        return qry_data
+
+    @classmethod
+    def __get_query_data(cls, data, query_str):
+        '''
+        Get the required set of data as specified in the query_str
+
+        Parameters:
+            data
+                This is a list of dicts containing the container/image data
+            query_str
+                This is the query
+
+        Returns:
+            A list of dicts of `data` that follow the query_str criteria
+        '''
+        
+        # TODO: Change this
+        return data
 
 if __name__ == "__main__":
     arg_list = "l"
-    container_details = ps_sqlify.get_container_details(arg_list)
+    container_details = ps_query.get_container_details(arg_list)
     print json.dumps(container_details)
 
