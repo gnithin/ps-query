@@ -108,7 +108,7 @@ class ps_query:
         return new_container_details
 
     @classmethod
-    def get_container_details(cls, arg_str, query_str=""):
+    def get_container_details(cls, arg_str, query={}):
         '''
         Get the relavant container details
 
@@ -124,23 +124,23 @@ class ps_query:
                 cls.container_data
                 )
 
-        qry_data = cls.__get_query_data(cls.purged_data, query_str)
+        qry_data = cls.__get_query_data(cls.purged_data, query)
 
         return qry_data
 
     @classmethod
-    def __get_query_data(cls, data, query_str):
+    def __get_query_data(cls, data, query):
         '''
-        Get the required set of data as specified in the query_str
+        Get the required set of data as specified in the query
 
         Parameters:
             data
                 This is a list of dicts containing the container/image data
-            query_str
+            query
                 This is the query
 
         Returns:
-            A list of dicts of `data` that follow the query_str criteria
+            A list of dicts of `data` that follow the query criteria
         '''
         
         # TODO: Change this
