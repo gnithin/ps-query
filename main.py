@@ -121,8 +121,8 @@ class ps_query:
         '''
         cls.container_data = cls.__get_container_full_details(arg_str)
         cls.purged_data = cls.__purge_container_details(
-                cls.container_data
-                )
+            cls.container_data
+        )
 
         qry_data = cls.__get_query_data(cls.purged_data, query)
 
@@ -142,12 +142,22 @@ class ps_query:
         Returns:
             A list of dicts of `data` that follow the query criteria
         '''
+        # Build expression tree with the query.
+        # Evaluate each dict of the data to the tree
+        # Return only those ids whose end result is true
         
-        # TODO: Change this
         return data
 
 if __name__ == "__main__":
     arg_list = "l"
-    container_details = ps_query.get_container_details(arg_list)
+    # arg_list = "a"
+    query = {
+        "names"    :  "insane_bhabha"
+    }
+    container_details = ps_query.get_container_details(
+            arg_list,
+            query
+    )
+
     print json.dumps(container_details)
 
