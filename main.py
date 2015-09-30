@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import subprocess
 import json
-
+from pprint import pprint
+import parse_sql_query
 
 class ps_query:
     # Static properties
@@ -29,7 +30,7 @@ class ps_query:
         args = set(prefix_args + args)
 
         arg_list = '-' + ''.join([arg for arg in args if arg in acceptable_args])
-        
+
         #Run this command
         #docker ps -qa | xargs docker inspect
         ps_res = subprocess.Popen(
@@ -48,10 +49,10 @@ class ps_query:
         #with open("example_output.out", 'w') as fp:
         #    fp.write(inspect_output)
 
-        inspect_output = json.loads(inspect_output_str) 
+        inspect_output = json.loads(inspect_output_str)
 
         return inspect_output
-    
+
     @classmethod
     def __purge_container_details(cls, container_details):
         '''
@@ -72,7 +73,7 @@ class ps_query:
                 else:
                     return None
             return dict_val
-        
+
         # Helper function #2
         def get_safe_val(ip_dict, key, default=None):
             val = get_keys(ip_dict, key)
@@ -82,7 +83,7 @@ class ps_query:
         # The required_fields assumes docker inspect is done
         # on a container id and not an Image id (That would give a different
         # json structure output)
-        
+
         required_fields = [
             "Id", # container_id
             "Image", # image_id
@@ -97,14 +98,14 @@ class ps_query:
         ]
 
         new_container_details = []
-        
+
         for cd in container_details:
             t_store = {
                     rf : get_safe_val(cd, rf) \
                     for rf in required_fields \
             }
             new_container_details.append(t_store)
-        
+
         return new_container_details
 
     @classmethod
@@ -145,19 +146,21 @@ class ps_query:
         # Build expression tree with the query.
         # Evaluate each dict of the data to the tree
         # Return only those ids whose end result is true
-        
+        parse_sql_query.parse_query()
+
         return data
 
 if __name__ == "__main__":
     arg_list = "l"
     # arg_list = "a"
-    query = {
-        "names"    :  "insane_bhabha"
-    }
+
+    # Example query
+    query = 'names = "insane_bhabha"'
+
     container_details = ps_query.get_container_details(
             arg_list,
             query
     )
 
-    print json.dumps(container_details)
+    pprint(container_details)
 
