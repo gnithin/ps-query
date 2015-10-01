@@ -7,6 +7,12 @@ from lexer import lexer
 # Needed for parser to obtain tokens explicitly
 from lexer import tokens
 
+meta_data = None
+
+# Some constants
+LITERALS = 0
+FIELDS = 1
+
 '''
 
             GRAMMAR
@@ -73,7 +79,10 @@ def p_common_prod_logical_0(p):
     Z : NOT Z
     '''
     # Probably check if p[2] are boolean
-    p[0] = not p[2]
+    resp_table = []
+    for i in len(p[2]):
+        resp_table.append(not p[2][i])
+    p[0] = resp_table
 
 
 def p_common_prod_logical_1(p):
@@ -81,14 +90,23 @@ def p_common_prod_logical_1(p):
     Z : Z AND Z
       | Z OR Z
     '''
-    # Probably check if p[1] and p[3] are boolean
-    l_op = p[2].lower()
-    if l_op == "and":
-        p[0] = p[1] and p[3]
-    elif l_op == "or":
-        p[0] = p[1] or p[3]
-    else:
-        raise SyntaxError
+    # TODO: Probably check if p[1] and p[3] are boolean
+    optr = p[2].lower()
+    resp_table = []
+
+    for i in xrange(len(p[1])):
+        l_val = p[1][i]
+        r_val = p[3][i]
+
+        if optr == "and":
+            resp_val = l_val and r_val
+        elif optr == "or":
+            resp_val = l_val or r_val
+        else:
+            raise SyntaxError
+        resp_table.append(resp_val)
+
+    p[0] = resp_table
 
 
 def p_common_prod_comparision(p):
@@ -101,31 +119,76 @@ def p_common_prod_comparision(p):
       | Z LTE Z
     '''
     # Do some kind of logical processing here.
-    l_op = p[1]
-    r_op = p[3]
+    l_key = p[1]['val']
+    r_key = p[3]['val']
+    optr = p[2]
 
-    if p[2] == "=":
-        p[0] = l_op == r_op
-    elif p[2] == "!=":
-        p[0] = l_op != r_op
-    elif p[2] == ">":
-        p[0] = l_op > r_op
-    elif p[2] == "<":
-        p[0] = l_op < r_op
-    elif p[2] == ">=":
-        p[0] = l_op >= r_op
-    elif p[2] == "<=":
-        p[0] = l_op <= r_op
-    else:
+    l_type = p[1]['type']
+    r_type = p[3]['type']
+
+    if len(meta_data) == 0:
         raise SyntaxError
 
+    # Check if the literal values are in the meta_data
+    # TODO: `not in first_row` needs to be standardized
+    first_row = meta_data[0]
 
-def p_common_prod_terminal(p):
+    if (
+        r_type == FIELDS and
+        r_key not in first_row.keys()
+    ) or (
+        l_type == FIELDS and
+        l_key not in first_row.keys()
+    ):
+        # Raise some meaningful error
+        raise SyntaxError
+
+    resp_table = []
+
+    for data in meta_data:
+        l_op = data[l_key] if l_type == FIELDS else l_key
+        r_op = data[r_key] if r_type == FIELDS else r_key
+
+        resp_val = None
+
+        # TODO: Do this better(how to do this without exec?)
+        if optr == "=":
+            resp_val = l_op == r_op
+        elif optr == "!=":
+            resp_val = l_op != r_op
+        elif optr == ">":
+            resp_val = l_op > r_op
+        elif optr == "<":
+            resp_val = l_op < r_op
+        elif optr == ">=":
+            resp_val = l_op >= r_op
+        elif optr == "<=":
+            resp_val = l_op <= r_op
+        else:
+            raise SyntaxError
+        resp_table.append(resp_val)
+
+    p[0] = resp_table
+
+
+def p_common_prod_field(p):
     '''
     Z : FIELDS
-      | LITERALS
     '''
-    p[0] = p[1]
+    p[0] = {
+        "type"  :   FIELDS,
+        "val"   :   p[1]
+    }
+
+
+def p_common_prod_literal(p):
+    '''
+    Z : LITERALS
+    '''
+    p[0] = {
+        "type"  :   LITERALS,
+        "val"   :   p[1]
+    }
 
 
 def p_error(p):
@@ -136,6 +199,14 @@ def p_error(p):
         print ("Syntax Error at EOF")
 
 yacc.yacc()
+
+
+def parser(query, data=None):
+    global meta_data
+    meta_data = data
+
+    yacc_resp = yacc.parse(query, lexer=lexer)
+    return yacc_resp
 
 if __name__ == "__main__":
     # This is just for the PEP8 warning to go away :P
