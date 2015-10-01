@@ -1,99 +1,145 @@
 #!/usr/bin/env python
 
-import ply.lex as lex
-# import ply.yacc as yacc
-from ply.lex import TOKEN
+# TODO: Change imports to package level
+import ply.yacc as yacc
+from lexer import lexer
 
-tokens = (
-    'FIELDS',
-    'LITERALS',  # String literals only
+# Needed for parser to obtain tokens explicitly
+from lexer import tokens
 
-    # Logical operators
-    'NOT',
-    'AND',
-    'OR',
+'''
 
-    # Comparision operators
-    'EQUALS',
-    'NOT_EQUALS',
-    'GT',
-    'LT',
-    'GTE',
-    'LTE',
+            GRAMMAR
+|---------------------------------|
+|    Z : L_PAREN Z R_PAREN        |
+|      | Z LOGICAL Z              |
+|      | Z COMPARISION Z          |
+|      | FIELDS                   |
+|      | LITERALS                 |
+|                                 |
+|    LOGICAL : NOT                |
+|            | AND                |
+|            | OR                 |
+|                                 |
+|    COMPARISION : EQUALS         |
+|                | NOT_EQUALS     |
+|                | GT             |
+|                | LT             |
+|                | GTE            |
+|                | LTE            |
+|---------------------------------|
 
-    # Parenthesis
-    'L_PAREN',
-    'R_PAREN'
+
+ALITER:
+
+P : L_PAREN E R_PAREN
+  | E
+
+E : E LOGICAL E
+  | C
+
+C : T COMPARISION T
+  | T
+
+T : FIELDS
+  | LITERALS
+
+'''
+
+precedence = (
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('right', 'NOT'),
+    ('nonassoc', 'EQUALS', 'NOT_EQUALS'),
+    ('nonassoc', 'GT', 'LT', 'GTE', 'LTE'),
+    ('nonassoc', 'L_PAREN', 'R_PAREN'),
 )
 
-# Regex specifications
 
-t_NOT = r'[nN][oO][tT]'
-t_AND = r'[aA][nN][dD]'
-t_OR = r'[oO][rR]'
-
-t_EQUALS = r'='
-t_NOT_EQUALS = r'!='
-t_GT = r'>'
-t_LT = r'<'
-t_GTE = r'>='
-t_LTE = r'<='
-t_L_PAREN = r'\('
-t_R_PAREN = r'\)'
-
-t_ignore = ' \t'
+def p_start_prod(p):
+    '''S : Z'''
+    p[0] = p[1]
 
 
-literal_lb = r'.*?(?<!\\)'
-literal_regex = r'' + (r""""{0}"|'{0}'""".format(literal_lb))
-print literal_regex
+def p_common_prod_paren(p):
+    '''
+    Z : L_PAREN Z R_PAREN
+    '''
+    p[0] = p[2]
 
 
-# @TOKEN(literal_regex)
-@TOKEN(r'".*(?<!\\)"')
-def t_LITERALS(t):
-    t.value = t.value[1:-1]
-    return t
+def p_common_prod_logical_0(p):
+    '''
+    Z : NOT Z
+    '''
+    # Probably check if p[2] are boolean
+    p[0] = not p[2]
 
 
-@TOKEN(r'[\w.]+')
-def t_FIELDS(t):
-    return t
+def p_common_prod_logical_1(p):
+    '''
+    Z : Z AND Z
+      | Z OR Z
+    '''
+    # Probably check if p[1] and p[3] are boolean
+    l_op = p[2].lower()
+    if l_op == "and":
+        p[0] = p[1] and p[3]
+    elif l_op == "or":
+        p[0] = p[1] or p[3]
+    else:
+        raise SyntaxError
 
 
-@TOKEN(r'\n')
-def t_newline(t):
-    t.lexer.lineno += len(t.value)
+def p_common_prod_comparision(p):
+    '''
+    Z : Z EQUALS Z
+      | Z NOT_EQUALS Z
+      | Z GT Z
+      | Z LT Z
+      | Z GTE Z
+      | Z LTE Z
+    '''
+    # Do some kind of logical processing here.
+    l_op = p[1]
+    r_op = p[3]
+
+    if p[2] == "=":
+        p[0] = l_op == r_op
+    elif p[2] == "!=":
+        p[0] = l_op != r_op
+    elif p[2] == ">":
+        p[0] = l_op > r_op
+    elif p[2] == "<":
+        p[0] = l_op < r_op
+    elif p[2] == ">=":
+        p[0] = l_op >= r_op
+    elif p[2] == "<=":
+        p[0] = l_op <= r_op
+    else:
+        raise SyntaxError
 
 
-def t_error(t):
-    print ("Lexer Error! %s" % str(t))
-    t.lexer.skip(1)
+def p_common_prod_terminal(p):
+    '''
+    Z : FIELDS
+      | LITERALS
+    '''
+    p[0] = p[1]
 
 
-lexer = lex.lex()
+def p_error(p):
+    if p:
+        print p
+        print ("Syntax Error - %s" % p.value)
+    else:
+        print ("Syntax Error at EOF")
+
+yacc.yacc()
 
 if __name__ == "__main__":
-    # Testing the lexer
-    test_data_li = [
-        # Testing basic literals an dfields
-        '''
-        name = "asdasd"
-        ''',
-        '''
-        created_date > '2007'
-        ''',
-        '''
-        name = "A Leftie's \"Nightmare\""
-        ''',
-        # Testing operations
-        '''
-        name = 'aladdin' and occupation = 'street rat'
-        '''
-    ]
-
-    for data in test_data_li:
-        lexer.input(data)
-        for tok in lexer:
-            print tok
-        print "-"*20
+    # This is just for the PEP8 warning to go away :P
+    # TODO: Remove this
+    tokens
+    s = '''a < z'''
+    print yacc.parse(s, lexer=lexer)
