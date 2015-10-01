@@ -4,19 +4,21 @@ import json
 from pprint import pprint
 import parse_sql_query
 
+
 class ps_query:
     # Static properties
-    container_data  = []
-    purged_data     = []
+    container_data = []
+    purged_data = []
 
     @classmethod
-    def __get_container_full_details(cls, args = "a"):
+    def __get_container_full_details(cls, args="a"):
         '''
         Get the container details in JSON format (from docker inspect)
 
         Parameters:
             *args
-                Optional argument that will be used to get the information that the docker command needs.
+                Optional argument that will be used to get the information that
+                the docker command needs.
                 Default value is `a`.
                 The acceptable values that will be interpreted are - a,l
 
@@ -29,24 +31,24 @@ class ps_query:
 
         args = set(prefix_args + args)
 
-        arg_list = '-' + ''.join([arg for arg in args if arg in acceptable_args])
+        arg_list = '-' + ''.join(arg for arg in args if arg in acceptable_args)
 
-        #Run this command
-        #docker ps -qa | xargs docker inspect
+        # Run this command
+        # docker ps -qa | xargs docker inspect
         ps_res = subprocess.Popen(
                     ["docker", "ps", arg_list],
-                    stdout = subprocess.PIPE
+                    stdout=subprocess.PIPE
                 )
 
         inspect_res = subprocess.Popen(
-                    ["xargs", "docker","inspect"],
-                    stdin = ps_res.stdout,
-                    stdout = subprocess.PIPE
+                    ["xargs", "docker", "inspect"],
+                    stdin=ps_res.stdout,
+                    stdout=subprocess.PIPE
                 )
         inspect_output_str, inspect_err_output_str = inspect_res.communicate()
 
         # TODO: Remove this block - Used for testing
-        #with open("example_output.out", 'w') as fp:
+        # with open("example_output.out", 'w') as fp:
         #    fp.write(inspect_output)
 
         inspect_output = json.loads(inspect_output_str)
@@ -59,7 +61,8 @@ class ps_query:
         Purges the docker inspect output of the unnecessary values.
         Parameters:
             container_details
-                This is a list of dicts, which is represented by the output of `docker inspect`.
+                This is a list of dicts, which is represented by the output of
+                `docker inspect`.
 
         Returns:
             List of dicts output with only the important properties
@@ -77,7 +80,7 @@ class ps_query:
         # Helper function #2
         def get_safe_val(ip_dict, key, default=None):
             val = get_keys(ip_dict, key)
-            return val if val != None else default
+            return val if val is not None else default
 
         # Purge all the unnecessary fields
         # The required_fields assumes docker inspect is done
@@ -85,24 +88,24 @@ class ps_query:
         # json structure output)
 
         required_fields = [
-            "Id", # container_id
-            "Image", # image_id
-            "Name", # container_name
-            "Config.Image", # image_name
-            "Config.Cmd", # command
-            "Created", # created
-            "State.StartedAt", #StartedAt
-            "State.FinishedAt", # FinishedAt
-            "State.Running", # status
-            "NetworkSettings.Ports"# ports
+            "Id",  # container_id
+            "Image",  # image_id
+            "Name",  # container_name
+            "Config.Image",  # image_name
+            "Config.Cmd",  # command
+            "Created",  # created
+            "State.StartedAt",  # StartedAt
+            "State.FinishedAt",  # FinishedAt
+            "State.Running",  # status
+            "NetworkSettings.Ports"  # ports
         ]
 
         new_container_details = []
 
         for cd in container_details:
             t_store = {
-                    rf : get_safe_val(cd, rf) \
-                    for rf in required_fields \
+                    rf : get_safe_val(cd, rf)
+                    for rf in required_fields
             }
             new_container_details.append(t_store)
 
@@ -115,7 +118,8 @@ class ps_query:
 
         Parameters:
             arg_str
-                A string representing the input arguments needed for docker ps output
+                A string representing the input arguments needed for docker ps
+                output
 
         Returns:
             A List of dicts that are relavant
@@ -146,9 +150,9 @@ class ps_query:
         # Build expression tree with the query.
         # Evaluate each dict of the data to the tree
         # Return only those ids whose end result is true
-        parse_sql_query.parse_query()
+        filtered_data = parse_sql_query.parse_query(query, data=data)
 
-        return data
+        return filtered_data
 
 if __name__ == "__main__":
     arg_list = "l"
@@ -163,4 +167,3 @@ if __name__ == "__main__":
     )
 
     pprint(container_details)
-
