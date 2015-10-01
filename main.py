@@ -155,11 +155,12 @@ class ps_query:
         return filtered_data
 
 if __name__ == "__main__":
-    arg_list = "l"
-    # arg_list = "a"
+    # arg_list = "l"
+    arg_list = "a"
 
     # Example query
-    query = 'names = "insane_bhabha"'
+    # query = 'Name = "/insane_bhabha"'
+    query = 'Name = "/sleepy_einstein"'
 
     container_details = ps_query.get_container_details(
             arg_list,
