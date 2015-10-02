@@ -6,6 +6,7 @@ from lexer import lexer
 
 # Needed for parser to obtain tokens explicitly
 from lexer import tokens
+from .name_mapper import name_map
 
 meta_data = None
 
@@ -151,9 +152,43 @@ def p_common_prod_comparision(p):
 
         resp_val = None
 
-        # TODO: Do this better(how to do this without exec?)
+        # TODO: Do this better(how to do this without eval/ast_eval?)
         if optr == "=":
-            resp_val = l_op == r_op
+
+            l_list_bool = type(l_op) == list
+            r_list_bool = type(r_op) == list
+
+            # The following takes into account the presence of lists
+            # as the items to be compared.
+            # If both the operands are strings, or if both the operands
+            # are lists, perform direct comparision.
+            # If only one of them is a list, then all the list elements
+            # are searched.(For eg, `command` is a list of commands, so search
+            # is performed for all keywords)
+
+            if (
+                (l_list_bool and r_list_bool) or
+                (not l_list_bool and not r_list_bool)
+            ):
+                resp_val = l_op == r_op
+
+            # TODO: Clean this ugly piece of shit(Use a function)
+            elif type(l_op) == list:
+                resp_val = False
+                for e in l_op:
+                    if e == r_op:
+                        resp_val = True
+                        break
+
+            elif type(r_op) == list:
+                resp_val = False
+                for e in r_op:
+                    if l_op == e:
+                        resp_val = True
+                        break
+            else:
+                resp_val = l_op == r_op
+
         elif optr == "!=":
             resp_val = l_op != r_op
         elif optr == ">":
@@ -175,9 +210,14 @@ def p_common_prod_field(p):
     '''
     Z : FIELDS
     '''
+
+    val = p[1]
+    if val in name_map.keys():
+        val = name_map[val]
+
     p[0] = {
         "type"  :   FIELDS,
-        "val"   :   p[1]
+        "val"   :   val
     }
 
 
