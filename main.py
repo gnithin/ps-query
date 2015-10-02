@@ -165,6 +165,8 @@ if __name__ == "__main__":
     query = 'image = "nithin/base_dep:0.1"'
     query = "name='silly_leakey'"
     query = 'command = "/bin/bash"'
+    query = 'name like ".*lee.*"'
+    query = 'name like ".*(lee|lly).*"'
 
     container_details = ps_query.get_container_details(
             arg_list,
