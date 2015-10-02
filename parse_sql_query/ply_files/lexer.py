@@ -64,7 +64,7 @@ def t_OR(t):
     return t
 
 
-@TOKEN(r'like')
+@TOKEN(r'[lL][iI][kK][eE]')
 def t_LIKE(t):
     return t
 
