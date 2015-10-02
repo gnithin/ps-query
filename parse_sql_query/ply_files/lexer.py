@@ -20,6 +20,7 @@ tokens = (
     'LT',
     'GTE',
     'LTE',
+    'LIKE',
 
     # Parenthesis
     'L_PAREN',
@@ -28,9 +29,6 @@ tokens = (
 
 # Regex specifications
 
-t_NOT = r'[nN][oO][tT]'
-t_AND = r'[aA][nN][dD]'
-t_OR = r'[oO][rR]'
 
 t_EQUALS = r'='
 t_NOT_EQUALS = r'!='
@@ -38,6 +36,7 @@ t_GT = r'>'
 t_LT = r'<'
 t_GTE = r'>='
 t_LTE = r'<='
+
 t_L_PAREN = r'\('
 t_R_PAREN = r'\)'
 
@@ -48,6 +47,26 @@ t_ignore = ' \t'
 # well
 literal_lb = r'.*?(?<!\\)'
 literal_regex = r'"{0}"|\'{0}\''.format(literal_lb)
+
+
+@TOKEN(r'[nN][oO][tT]')
+def t_NOT(t):
+    return t
+
+
+@TOKEN(r'[aA][nN][dD]')
+def t_AND(t):
+    return t
+
+
+@TOKEN(r'[oO][rR]')
+def t_OR(t):
+    return t
+
+
+@TOKEN(r'like')
+def t_LIKE(t):
+    return t
 
 
 @TOKEN(literal_regex)
@@ -94,7 +113,8 @@ def test_lexer():
         '''
         name = 'aladdin' and occupation = 'street rat'
         ''',
-        '''c'''
+        '''c''',
+        '''command or and not like askhdajs "asas"'''
     ]
 
     for data in test_data_li:
