@@ -2,6 +2,7 @@
 
 # TODO: Change imports to package level
 import ply.yacc as yacc
+import re
 from lexer import lexer
 
 # Needed for parser to obtain tokens explicitly
@@ -58,7 +59,7 @@ precedence = (
     ('left', 'AND'),
     ('right', 'NOT'),
     ('nonassoc', 'EQUALS', 'NOT_EQUALS'),
-    ('nonassoc', 'GT', 'LT', 'GTE', 'LTE'),
+    ('nonassoc', 'GT', 'LT', 'GTE', 'LTE', 'LIKE'),
     ('nonassoc', 'L_PAREN', 'R_PAREN'),
 )
 
@@ -118,7 +119,13 @@ def p_common_prod_comparision(p):
       | Z LT Z
       | Z GTE Z
       | Z LTE Z
+      | Z LIKE Z
     '''
+    # Helper function
+    def match_regex(comparator, regex):
+        regex = r'^' + regex + r'$'
+        return re.match(regex, comparator) is not None
+
     # Do some kind of logical processing here.
     l_key = p[1]['val']
     r_key = p[3]['val']
@@ -199,6 +206,19 @@ def p_common_prod_comparision(p):
             resp_val = l_op >= r_op
         elif optr == "<=":
             resp_val = l_op <= r_op
+        elif optr.lower() == "like":
+            # Need list logic here as well
+            # Assumption - l_op is field and r_op is regex(literal)
+            # Find the literal(regex)
+            if r_type == LITERALS and l_type == FIELDS:
+                comparator = l_op
+                regex = r_op
+            else:
+                comparator = r_op
+                regex = l_op
+
+            resp_val = match_regex(comparator, regex)
+
         else:
             raise SyntaxError
         resp_table.append(resp_val)
