@@ -1,47 +1,23 @@
 ## TODO
 
-- [x] Basic working(subprocess)
-- [ ] Create working classes
+- [x] Create working classes
   - [x] Create static class for logic
-  - [ ] Create class for presentation
-- [ ] Store entries for image-data as well.(Even they need to be searchable)
-- [ ] Create basic logic for different scenarios
-- [ ] Correct ps output formatting
-- [ ] Create click support
 
-- [ ] Create mongodb-like querying syntax
-  - [ ] Comaparision
-    - [ ] $eq
-    - [ ] $ne
-    - [ ] $gt
-    - [ ] $gte
-    - [ ] $lt
-    - [ ] $lte
-    - [ ] $in
-    - [ ] $nin
-  - [ ] Logical
-    - [ ] $or
-    - [ ] $and
-    - [ ] $not
-    - [ ] $nor
-  - [ ] Other functions
-    - [ ] $regex
-    - [ ] $group
-    - [ ] $sum
-    - [ ] $avg
-    - [ ] $first
-    - [ ] $max
-    - [ ] $min
+- [ ] Output formatting
+  - [ ] Add click support
+  - [ ] Figure out JSON mode and normal CLI mode display
+
+- [ ] Query Logic
+  - [ ] Add like operator
+  - [ ] Add list support as well for like operation
+  - [ ] Add date comparision
+  - [ ] Partial containerId and ImageId hash search
+  - [ ] Add proper documention and comments
+  - [ ] Add proper tests (Use unittest)
 
 - [ ] Creating basic language templates/operations
-  - [ ] select (It will always be select, nothing else. Might as well ignore it)
-  - [ ] from <table> (Not required, although can be added)
-  - [ ] where clause - col logical number , date, exited
+  - [x] where clause - col logical number , date, exited
   - [ ] order by
   - [ ] limit
   - [ ] offset
-  - [ ] max()
-  - [ ] min()
-  - [ ] having clause
   - [ ] regex support (important)
-- [ ] Output type
