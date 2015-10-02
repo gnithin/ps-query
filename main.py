@@ -159,8 +159,12 @@ if __name__ == "__main__":
     arg_list = "a"
 
     # Example query
-    # query = 'Name = "/insane_bhabha"'
-    query = 'Name = "/sleepy_einstein"'
+    # query = 'Name = "insane_bhabha"'
+    query = 'name = "sleepy_einstein"'
+    query = 'image = "ubuntu"'
+    query = 'image = "nithin/base_dep:0.1"'
+    query = "name='silly_leakey'"
+    query = 'command = "/bin/bash"'
 
     container_details = ps_query.get_container_details(
             arg_list,
