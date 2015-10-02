@@ -21,3 +21,5 @@
   - [ ] limit
   - [ ] offset
   - [ ] regex support (important)
+
+- [ ] After everything is done, update README
