@@ -7,16 +7,13 @@ ps-query will run the docker ps (with your defined flags if necessary) and forma
 The query language is fairly simple, similar to basic sql syntax.
 
 TODO:
-* Basic working(subprocess)
-* Creating basic language templates/operations
-  * select (It will always be select, nothing else. Might as well ignore it)
-  * from <table> (Not required, although can be added)
-  * where clause - col logical number , date, exited
-  * order by
-  * limit
-  * offset
-  * max()
-  * min()
-  * having clause
-  * regex support (important)
-* Output type
+* Add query examples -
+  * name = "sleepy_einstein"
+  * image = "ubuntu"
+  * image = "nithin/base_dep:0.1"
+  * command = "/bin/bash"
+  * name like ".*lee.*"
+  * name like ".*(lee|lly).*"
+* Add examples for CLI args.
+* Add examples for pylib args.
+* Enlist basic operators and features.(Probably best if it's explained in the example itself.)
