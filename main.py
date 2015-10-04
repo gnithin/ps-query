@@ -167,6 +167,7 @@ if __name__ == "__main__":
     query = 'command = "/bin/bash"'
     query = 'name like ".*lee.*"'
     query = 'name like ".*(lee|lly).*"'
+    query = 'command like ".*\-n.*"'
 
     container_details = ps_query.get_container_details(
             arg_list,
