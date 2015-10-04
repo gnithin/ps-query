@@ -1,6 +1,11 @@
 import re
 
 
+def logic_optr_NOT_EQUALS(l_op, r_op):
+    resp_val = l_op != r_op
+    return resp_val
+
+
 def logic_optr_EQUALS(l_op, r_op):
     l_list_bool = type(l_op) == list
     r_list_bool = type(r_op) == list
@@ -55,4 +60,24 @@ def logic_optr_like(comparator, regex):
     else:
         resp_val = match_regex(comparator, regex)
 
+    return resp_val
+
+
+def logic_optr_GT(l_op, r_op):
+    resp_val = l_op > r_op
+    return resp_val
+
+
+def logic_optr_LT(l_op, r_op):
+    resp_val = l_op < r_op
+    return resp_val
+
+
+def logic_optr_GTE(l_op, r_op):
+    resp_val = l_op >= r_op
+    return resp_val
+
+
+def logic_optr_LTE(l_op, r_op):
+    resp_val = l_op <= r_op
     return resp_val

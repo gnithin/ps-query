@@ -2,7 +2,6 @@
 
 # TODO: Change imports to package level
 import ply.yacc as yacc
-import re
 from lexer import lexer
 
 # Needed for parser to obtain tokens explicitly
@@ -15,6 +14,7 @@ meta_data = None
 # Some constants
 LITERALS = 0
 FIELDS = 1
+
 
 '''
 
@@ -122,11 +122,6 @@ def p_common_prod_comparision(p):
       | Z LTE Z
       | Z LIKE Z
     '''
-    # Helper function
-    def match_regex(comparator, regex):
-        regex = r'^' + regex + r'$'
-        return re.match(regex, comparator) is not None
-
     # Do some kind of logical processing here.
     l_key = p[1]['val']
     r_key = p[3]['val']
@@ -170,15 +165,15 @@ def p_common_prod_comparision(p):
         if optr == "=":
             resp_val = p_utils.logic_optr_EQUALS(l_op, r_op)
         elif optr == "!=":
-            resp_val = l_op != r_op
+            resp_val = p_utils.logic_optr_NOT_EQUALS(l_op, r_op)
         elif optr == ">":
-            resp_val = l_op > r_op
+            resp_val = p_utils.logic_optr_GT(l_op, r_op)
         elif optr == "<":
-            resp_val = l_op < r_op
+            resp_val = p_utils.logic_optr_LT(l_op, r_op)
         elif optr == ">=":
-            resp_val = l_op >= r_op
+            resp_val = p_utils.logic_optr_GTE(l_op, r_op)
         elif optr == "<=":
-            resp_val = l_op <= r_op
+            resp_val = p_utils.logic_optr_LTE(l_op, r_op)
         elif optr.lower() == "like":
             # Find the literal(regex)
             comparator = r_op
@@ -188,7 +183,6 @@ def p_common_prod_comparision(p):
                 regex = r_op
 
             resp_val = p_utils.logic_optr_like(comparator, regex)
-            # resp_val = match_regex(comparator, regex)
 
         else:
             raise SyntaxError
