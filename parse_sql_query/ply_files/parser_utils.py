@@ -19,6 +19,10 @@ def middleware(func_name):
                          if k == "val"
                          ]
 
+            # Any kind of preprocessing before the actual processing
+            # needs to be done here
+            # The types can be gauged by checking out the type_data list
+            #
             if any([t in datetime_type_fields for t in type_list]):
                 # perform datetime conversions
                 l_op, r_op = convert_datetime(l_op, r_op)
