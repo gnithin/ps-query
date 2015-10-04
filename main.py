@@ -169,6 +169,8 @@ if __name__ == "__main__":
     query = 'name like ".*(lee|lly).*"'
     query = 'command like ".*\-n.*"'
     query = "CREATED < '2015-09-14'"
+    query = "container_id like '.*d825131b21154b0ed2.*'"
+    query = 'image_id like ".*0f441c71.*"'
 
     container_details = ps_query.get_container_details(
             arg_list,
