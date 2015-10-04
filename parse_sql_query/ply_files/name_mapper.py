@@ -9,3 +9,9 @@ name_map = {
         "finished_at"  : "state.finishedat",
         "command"      : "config.cmd"
 }
+
+datetime_type_fields = [
+    'created',
+    'finished_at',
+    'started_at',
+]
