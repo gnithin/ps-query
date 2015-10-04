@@ -77,6 +77,7 @@ def t_LITERALS(t):
 
 @TOKEN(r'[\w.]+')
 def t_FIELDS(t):
+    t.value = t.value.lower()
     return t
 
 
