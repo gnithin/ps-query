@@ -1,4 +1,36 @@
 import re
+from .name_mapper import datetime_type_fields
+
+
+def middleware(func_name):
+    def callback(*args, **kwargs):
+        # print args
+        # print kwargs
+
+        if 'type_data' in kwargs:
+            l_op = args[0]
+            r_op = args[1]
+
+            # Handling datetime
+            type_data = kwargs['type_data']
+            type_list = [v
+                         for l in type_data
+                         for k, v in l.iteritems()
+                         if k == "val"
+                         ]
+
+            if any([t in datetime_type_fields for t in type_list]):
+                # perform datetime conversions
+                l_op, r_op = convert_datetime(l_op, r_op)
+
+        # print "-"*50
+        return func_name(l_op, r_op)
+    return callback
+
+
+def convert_datetime(op1, op2):
+    # handle all datetime stuff here.
+    return op1, op2
 
 
 def logic_optr_NOT_EQUALS(l_op, r_op):
@@ -63,21 +95,23 @@ def logic_optr_like(comparator, regex):
     return resp_val
 
 
-def logic_optr_GT(l_op, r_op):
+@middleware
+def logic_optr_GT(l_op, r_op, type_data=None):
     resp_val = l_op > r_op
     return resp_val
 
 
-def logic_optr_LT(l_op, r_op):
+@middleware
+def logic_optr_LT(l_op, r_op, type_data=None):
     resp_val = l_op < r_op
     return resp_val
 
 
-def logic_optr_GTE(l_op, r_op):
+def logic_optr_GTE(l_op, r_op, type_data=None):
     resp_val = l_op >= r_op
     return resp_val
 
 
-def logic_optr_LTE(l_op, r_op):
+def logic_optr_LTE(l_op, r_op, type_data=None):
     resp_val = l_op <= r_op
     return resp_val

@@ -148,6 +148,19 @@ def p_common_prod_comparision(p):
         # Raise some meaningful error
         raise SyntaxError
 
+    # This var is for detecting the type of variable
+    operations_list = []
+    if r_type == FIELDS:
+        operations_list.append({
+            "pos"   :   "r",
+            "val"   :   r_key
+        })
+    if l_type == FIELDS:
+        operations_list.append({
+            "pos"   :   "l",
+            "val"   :   l_key
+        })
+
     resp_table = []
 
     '''
@@ -167,9 +180,17 @@ def p_common_prod_comparision(p):
         elif optr == "!=":
             resp_val = p_utils.logic_optr_NOT_EQUALS(l_op, r_op)
         elif optr == ">":
-            resp_val = p_utils.logic_optr_GT(l_op, r_op)
+            resp_val = p_utils.logic_optr_GT(
+                l_op,
+                r_op,
+                type_data=operations_list
+            )
         elif optr == "<":
-            resp_val = p_utils.logic_optr_LT(l_op, r_op)
+            resp_val = p_utils.logic_optr_LT(
+                l_op,
+                r_op,
+                type_data=operations_list
+            )
         elif optr == ">=":
             resp_val = p_utils.logic_optr_GTE(l_op, r_op)
         elif optr == "<=":
