@@ -8,6 +8,7 @@ from lexer import lexer
 # Needed for parser to obtain tokens explicitly
 from lexer import tokens
 from .name_mapper import name_map
+import parser_utils as p_utils
 
 meta_data = None
 
@@ -129,10 +130,11 @@ def p_common_prod_comparision(p):
     # Do some kind of logical processing here.
     l_key = p[1]['val']
     r_key = p[3]['val']
-    optr = p[2]
 
     l_type = p[1]['type']
     r_type = p[3]['type']
+
+    optr = p[2]
 
     if len(meta_data) == 0:
         raise SyntaxError
@@ -153,6 +155,11 @@ def p_common_prod_comparision(p):
 
     resp_table = []
 
+    '''
+    Iterate through each element in `meta_data`,
+    Get the value of the key that is used in the query,
+    Resolve the comparision operations.
+    '''
     for data in meta_data:
         l_op = data[l_key] if l_type == FIELDS else l_key
         r_op = data[r_key] if r_type == FIELDS else r_key
@@ -161,41 +168,7 @@ def p_common_prod_comparision(p):
 
         # TODO: Do this better(how to do this without eval/ast_eval?)
         if optr == "=":
-
-            l_list_bool = type(l_op) == list
-            r_list_bool = type(r_op) == list
-
-            # The following takes into account the presence of lists
-            # as the items to be compared.
-            # If both the operands are strings, or if both the operands
-            # are lists, perform direct comparision.
-            # If only one of them is a list, then all the list elements
-            # are searched.(For eg, `command` is a list of commands, so search
-            # is performed for all keywords)
-
-            if (
-                (l_list_bool and r_list_bool) or
-                (not l_list_bool and not r_list_bool)
-            ):
-                resp_val = l_op == r_op
-
-            # TODO: Clean this ugly piece of shit(Use a function)
-            elif type(l_op) == list:
-                resp_val = False
-                for e in l_op:
-                    if e == r_op:
-                        resp_val = True
-                        break
-
-            elif type(r_op) == list:
-                resp_val = False
-                for e in r_op:
-                    if l_op == e:
-                        resp_val = True
-                        break
-            else:
-                resp_val = l_op == r_op
-
+            resp_val = p_utils.logic_optr_EQUALS(l_op, r_op)
         elif optr == "!=":
             resp_val = l_op != r_op
         elif optr == ">":
@@ -207,17 +180,15 @@ def p_common_prod_comparision(p):
         elif optr == "<=":
             resp_val = l_op <= r_op
         elif optr.lower() == "like":
-            # Need list logic here as well
-            # Assumption - l_op is field and r_op is regex(literal)
             # Find the literal(regex)
+            comparator = r_op
+            regex = l_op
             if r_type == LITERALS and l_type == FIELDS:
                 comparator = l_op
                 regex = r_op
-            else:
-                comparator = r_op
-                regex = l_op
 
-            resp_val = match_regex(comparator, regex)
+            resp_val = p_utils.logic_optr_like(comparator, regex)
+            # resp_val = match_regex(comparator, regex)
 
         else:
             raise SyntaxError
