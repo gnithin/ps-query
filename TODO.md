@@ -8,7 +8,7 @@
   - [ ] Figure out JSON mode and normal CLI mode display
 
 - [ ] Query Logic
-  - [ ] Add like operator
+  - [x] Add like operator
   - [ ] Add list support as well for like operation
   - [ ] Add date comparision
   - [ ] Partial containerId and ImageId hash search
@@ -20,6 +20,6 @@
   - [ ] order by
   - [ ] limit
   - [ ] offset
-  - [ ] regex support (important)
+  - [x] regex support (important)
 
 - [ ] After everything is done, update README
