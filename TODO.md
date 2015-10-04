@@ -5,6 +5,10 @@
 
 - [ ] Output formatting
   - [ ] Add click support
+  - [ ] CLI components
+    - [ ] output mode - json/formatted output(like docker ps)
+    - [ ] order by
+    - [ ] limit and offset
   - [ ] Figure out JSON mode and normal CLI mode display
 
 - [ ] Query Logic
@@ -13,7 +17,7 @@
   - [x] Add date comparision
     - [x] Add simple date-format guessing
     - [ ] Add support for 'yesterday' and 'tomorrow' et al
-  - [ ] Partial containerId and ImageId hash search
+  - [x] Partial containerId and ImageId hash search
   - [ ] Add proper documention and comments
   - [ ] Add proper tests (Use unittest)
 
