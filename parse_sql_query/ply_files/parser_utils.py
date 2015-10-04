@@ -34,19 +34,17 @@ def logic_optr_EQUALS(l_op, r_op):
     return resp_val
 
 
-# Helper function
-def match_regex(comparator, regex):
-    # This is done to make sure that the whole term is matched.
-    # Might need to remove this block if needed.
-    if regex[0] != "^":
-        regex = r'^' + regex
-    if regex[-1] != "$":
-        regex += r'$'
-
-    return re.match(regex, comparator) is not None
-
-
 def logic_optr_like(comparator, regex):
+    # Helper function for matching queries
+    def match_regex(comp, r):
+        # This is done to make sure that the whole term is matched.
+        # Might need to remove this block if needed.
+        if r[0] != "^":
+            r = r'^' + r
+        if r[-1] != "$":
+            r += r'$'
+        return re.match(r, comp) is not None
+
     resp_val = False
 
     if type(comparator) == list:
