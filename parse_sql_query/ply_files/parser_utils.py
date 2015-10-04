@@ -1,12 +1,10 @@
 import re
 from .name_mapper import datetime_type_fields
+from dateutil.parser import parse as datetime_parser
 
 
 def middleware(func_name):
     def callback(*args, **kwargs):
-        # print args
-        # print kwargs
-
         if 'type_data' in kwargs:
             l_op = args[0]
             r_op = args[1]
@@ -27,14 +25,28 @@ def middleware(func_name):
                 # perform datetime conversions
                 l_op, r_op = convert_datetime(l_op, r_op)
 
-        # print "-"*50
         return func_name(l_op, r_op)
     return callback
 
+# Functions that convert the input field values
+
 
 def convert_datetime(op1, op2):
+    def get_secs(t):
+        return datetime_parser(t).strftime("%s")
+
     # handle all datetime stuff here.
+    # Listing the datetimes that need to be considered.
+    # 2015-09-14T20:03:19.973324053Z
+    # TODO: use [parseddatetime](https://github.com/bear/parsedatetime)
+    # 2015-09-14 00:00:00 - Mysql format -> YYYY-MM-DD HH:MM:SS
+    # yesterday
+    # tomorrow
+    # today
+    op1, op2 = get_secs(op1), get_secs(op2)
     return op1, op2
+
+# Functions that describe the functioning of an operator
 
 
 def logic_optr_NOT_EQUALS(l_op, r_op):
