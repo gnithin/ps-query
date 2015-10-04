@@ -11,6 +11,8 @@
   - [x] Add like operator
   - [x] Add list support as well for like operation
   - [ ] Add date comparision
+    - [ ] Add simple date-format guessing
+    - [ ] Add support for 'yesterday' and 'tomorrow' et al
   - [ ] Partial containerId and ImageId hash search
   - [ ] Add proper documention and comments
   - [ ] Add proper tests (Use unittest)

@@ -168,6 +168,7 @@ if __name__ == "__main__":
     query = 'name like ".*lee.*"'
     query = 'name like ".*(lee|lly).*"'
     query = 'command like ".*\-n.*"'
+    query = "created < '2015-09-14'"
 
     container_details = ps_query.get_container_details(
             arg_list,
