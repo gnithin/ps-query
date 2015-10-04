@@ -19,7 +19,6 @@ def logic_optr_EQUALS(l_op, r_op):
     ):
         resp_val = l_op == r_op
 
-    # TODO: Clean this ugly piece of shit(Use a helper function)
     else:
         # if either one of the operands is a list
         resp_val = False
@@ -37,7 +36,11 @@ def logic_optr_EQUALS(l_op, r_op):
 
 # Helper function
 def match_regex(comparator, regex):
-    regex = r'^' + regex + r'$'
+    if regex[0] != "^":
+        regex = r'^' + regex
+    if regex[-1] != "$":
+        regex += r'$'
+    # regex = r'^' + regex + r'$'
     return re.match(regex, comparator) is not None
 
 
