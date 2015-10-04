@@ -4,11 +4,14 @@
   - [x] Create static class for logic
 
 - [ ] Output formatting
-  - [ ] Add click support
+  - [x] Add click support
   - [ ] CLI components
     - [ ] output mode - json/formatted output(like docker ps)
     - [ ] order by
     - [ ] limit and offset
+  - [ ] Restructure package tree
+  - [ ] Use setuptools to configure the package
+  - [ ] Add testcases
   - [ ] Figure out JSON mode and normal CLI mode display
 
 - [ ] Query Logic
@@ -20,12 +23,5 @@
   - [x] Partial containerId and ImageId hash search
   - [ ] Add proper documention and comments
   - [ ] Add proper tests (Use unittest)
-
-- [ ] Creating basic language templates/operations
-  - [x] where clause - col logical number , date, exited
-  - [ ] order by
-  - [ ] limit
-  - [ ] offset
-  - [x] regex support (important)
 
 - [ ] After everything is done, update README
