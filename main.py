@@ -156,7 +156,7 @@ class ps_query:
 
 if __name__ == "__main__":
     # arg_list = "l"
-    arg_list = "l"
+    arg_list = "a"
 
     # Example query
     # query = 'Name = "insane_bhabha"'
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     query = 'name like ".*lee.*"'
     query = 'name like ".*(lee|lly).*"'
     query = 'command like ".*\-n.*"'
-    query = "CREATED > '2015-09-14'"
+    query = "CREATED < '2015-09-14'"
 
     container_details = ps_query.get_container_details(
             arg_list,
@@ -176,3 +176,7 @@ if __name__ == "__main__":
     )
 
     pprint(container_details)
+    print "\n"
+    print "*" * 50
+    print "\n%d Results match\n" % len(container_details)
+    print "*" * 50
