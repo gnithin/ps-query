@@ -9,7 +9,7 @@
 
 - [ ] Query Logic
   - [x] Add like operator
-  - [ ] Add list support as well for like operation
+  - [x] Add list support as well for like operation
   - [ ] Add date comparision
   - [ ] Partial containerId and ImageId hash search
   - [ ] Add proper documention and comments
