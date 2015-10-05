@@ -1,8 +1,8 @@
-import sys
+# import sys
 
-# Probably need this at every test file
-if ".." not in sys.path:
-    sys.path.insert(0, "..")
+# # Probably need this at every test file
+# if ".." not in sys.path:
+    # sys.path.insert(0, "..")
 
 from ps_query import ps_query
 
