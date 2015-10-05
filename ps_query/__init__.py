@@ -1,1 +1,1 @@
-import main.py as ps_query
+from main import ps_query
