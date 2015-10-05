@@ -29,11 +29,19 @@ def parse_sql_query(query, data=None):
     # Filter out all the unwanted data elements.
 
     cleaned_data = clean_data(data)
+
+    if query.strip() == "":
+        # If it's an empty query
+        # send everything
+        return data
+
     parse_resp = parser(query, data=cleaned_data)
 
     resp_list = []
-    for i in xrange(len(data)):
-        if parse_resp[i] is True:
-            resp_list.append(data[i])
+
+    if parse_resp is not None:
+        for i in xrange(len(data)):
+            if parse_resp[i] is True:
+                resp_list.append(data[i])
 
     return resp_list
