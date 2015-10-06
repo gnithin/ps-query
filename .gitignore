@@ -5,3 +5,4 @@
 venv/
 .ropeproject/
 parsetab.py
+ps_query.egg-info/*
