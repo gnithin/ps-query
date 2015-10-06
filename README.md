@@ -6,14 +6,70 @@ ps-query will run the docker ps (with your defined flags if necessary) and forma
 
 The query language is fairly simple, similar to basic sql syntax.
 
+### Installing it
+
+* Clone repo - 
+```
+git clone https://github.com/gnithin/ps-query.git
+```
+
+* Go into the `ps-query` directory
+```
+cd ps-query
+```
+
+* (Optional) Now, if you want this script to be temporary, or contained, consider creating a [virtual environment]() at this point and enter it - 
+```
+virtualenv venv
+. venv/bin/activate
+```
+
+* Install via pip -
+```
+pip install --editable .
+```
+
+This will install all the dependencies and the rest of it into this directory.
+
+### Usage
+
+If everything went well, the following should work - 
+```
+ps_query -a -j
+```
+
+[Prints out the json output of all the recent containers]
+
+* You can query like this - 
+```
+ps_query -q 'name = "sleepy_einstein"' -j
+```
+
+* Or using a regex - 
+```
+ps_query -q 'name like ".*(lee|lly).*"' -j
+```
+
+* Search for images whose names you don't remember quite well - 
+(Some image name which is either `base` or `bass`?)
+```
+ps_query -q 'image like ".*bas[es].*"'
+```
+
+* Search for containers by their commands as well(even if you only rember 1 of it's commands) -
+```
+ps_query -q 'command = "/bin/bash"'
+```
+
+* Logical comparision is also available - 
+  * Suppose you need to find containers of an `ubuntu` image with a certain command in it - 
+      ```
+      ps_query -q 'command = "/bin/bash" and image = "ubuntu"'
+      ```
+                  
+
 TODO:
-* Add query examples -
-  * name = "sleepy_einstein"
-  * image = "ubuntu"
-  * image = "nithin/base_dep:0.1"
-  * command = "/bin/bash"
-  * name like ".*lee.*"
-  * name like ".*(lee|lly).*"
+* Add query examples 
 * Add examples for CLI args.
 * Add examples for pylib args.
 * Enlist basic operators and features.(Probably best if it's explained in the example itself.)
