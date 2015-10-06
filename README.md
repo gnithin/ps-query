@@ -63,10 +63,22 @@ ps_query -q 'command = "/bin/bash"'
 
 * Logical comparision is also available - 
   * Suppose you need to find containers of an `ubuntu` image with a certain command in it - 
-      ```
-      ps_query -q 'command = "/bin/bash" and image = "ubuntu"'
-      ```
-                  
+ 
+	```
+	ps_query -q 'command = "/bin/bash" and image = "ubuntu"'
+	```
+	
+  * Suppose you need to find (certain name and image=A) or (image=B)
+  
+    ```
+    ps_query -q 'name like ".*ha.*" and image="nithin/base_dep:0.1" or image="ubuntu"' -j
+    ```
+       
+  * Or another variant of above - (container name) and (image=A or image=B)
+  
+    ```
+    ps_query -q 'name like ".*ha.*" and (image="nithin/base_dep:0.1" or image="ubuntu")' -j
+    ```
 
 TODO:
 * Add query examples 
