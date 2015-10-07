@@ -18,7 +18,7 @@ git clone https://github.com/gnithin/ps-query.git
 cd ps-query
 ```
 
-* (Optional) Now, if you want this script to be temporary, or contained, consider creating a [virtual environment]() at this point and enter it - 
+* (Optional) Now, if you want this script to be temporary, or contained, consider creating a [virtual environment](https://virtualenv.pypa.io/en/latest/) at this point and enter it - 
 ```
 virtualenv venv
 . venv/bin/activate
@@ -56,7 +56,7 @@ ps_query -q 'name like ".*(lee|lly).*"' -j
 ps_query -q 'image like ".*bas[es].*"'
 ```
 
-* Search for containers by their commands as well(even if you only rember 1 of it's commands) -
+* Search for containers by their commands as well(even if you only remember 1 of it's commands) -
 ```
 ps_query -q 'command = "/bin/bash"'
 ```
@@ -73,15 +73,15 @@ ps_query -q 'command = "/bin/bash"'
     ```
     ps_query -q 'name like ".*ha.*" and image="nithin/base_dep:0.1" or image="ubuntu"' -j
     ```
-       
+      
   * Or another variant of above - (container name) and (image=A or image=B)
   
     ```
     ps_query -q 'name like ".*ha.*" and (image="nithin/base_dep:0.1" or image="ubuntu")' -j
     ```
 
-TODO:
-* Add query examples 
-* Add examples for CLI args.
-* Add examples for pylib args.
-* Enlist basic operators and features.(Probably best if it's explained in the example itself.)
+<!--TODO:-->
+<!--* Add query examples -->
+<!--* Add examples for CLI args.-->
+<!--* Add examples for pylib args.-->
+<!--* Enlist basic operators and features.(Probably best if it's explained in the example itself.)-->
