@@ -11,7 +11,7 @@ class TestPSQueryBasicFunctions(unittest.TestCase):
         key = 'sleepy_einstein'
         query = ('name = "%s"' % key)
         arg = "a"
-        resp = test_func(
+        resp, status = test_func(
             arg,
             query
         )
@@ -22,7 +22,7 @@ class TestPSQueryBasicFunctions(unittest.TestCase):
         query = ""
         arg = "a"
 
-        resp = test_func(
+        resp, status = test_func(
             arg,
             query
         )
