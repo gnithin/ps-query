@@ -11,6 +11,29 @@ class ps_query:
     purged_data = []
 
     @classmethod
+    def __detect_docker_install(cls):
+        '''
+        Check if docker is installed
+
+        Returns
+            A boolean indicating docker installation statusw
+        '''
+        cmd = ["docker", "-v"]
+        try:
+            sp_res = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+            docker_resp, err = sp_res.communicate()
+        except OSError:
+            # Would probably be a good idea to log something here.
+            pass
+        except Exception:
+            pass
+        else:
+            if not err:
+                return True
+
+        return False
+
+    @classmethod
     def __get_container_full_details(cls, args="a"):
         '''
         Get the container details in JSON format (from docker inspect)
@@ -25,6 +48,7 @@ class ps_query:
         Returns:
             A list of dicts output of the docker inspect command.
         '''
+
         acceptable_args = "qal"
         prefix_args = "q"
         arg_list = ""
@@ -124,6 +148,17 @@ class ps_query:
         Returns:
             A List of dicts that are relavant
         '''
+        docker_installation = cls.__detect_docker_install()
+
+        if not docker_installation:
+            msg = """
+                You don't seem to have docker installed.
+                The command -
+                    docker -v
+                failed to run properly :'(
+            """
+            return msg, False
+
         cls.container_data = cls.__get_container_full_details(arg_str)
         cls.purged_data = cls.__purge_container_details(
             cls.container_data
@@ -131,7 +166,7 @@ class ps_query:
 
         qry_data = cls.__get_query_data(cls.purged_data, query)
 
-        return qry_data
+        return qry_data, True
 
     @classmethod
     def __get_query_data(cls, data, query):
@@ -172,7 +207,7 @@ if __name__ == "__main__":
     query = "container_id like '.*d825131b21154b0ed2.*'"
     query = 'image_id like ".*0f441c71.*"'
 
-    container_details = ps_query.get_container_details(
+    container_details, status = ps_query.get_container_details(
             arg_list,
             query
     )
