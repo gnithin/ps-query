@@ -151,12 +151,12 @@ class ps_query:
         docker_installation = cls.__detect_docker_install()
 
         if not docker_installation:
-            msg = """
-                You don't seem to have docker installed.
-                The command -
-                    docker -v
-                failed to run properly :'(
-            """
+            msg = (
+                "\nYou don't seem to have docker installed.\n" +
+                "The command -\n" +
+                "docker -v\n" +
+                "failed to run properly :'(\n"
+            )
             return msg, False
 
         cls.container_data = cls.__get_container_full_details(arg_str)
