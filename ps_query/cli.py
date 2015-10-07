@@ -36,36 +36,47 @@ def ps_query(all, latest, query, json):
     if query is None:
         query = ""
 
-    container_details = qry.get_container_details(
+    container_details, status = qry.get_container_details(
         arg,
         query
     )
 
-    output_size = len(container_details)
+    if not status :
+        click.echo(
+            "%s\n%s\n%s" %
+            (
+                "-"*50,
+                container_details,
+                "-"*50
+            )
+        )
 
-    output_format = pformat(
-        container_details
-    )
-
-    if json == 0:
-        # print in table format
-        # Probably use Pylsy for this
-        click.echo("""
-            Better looking output comingup!
-            (Use -j option instead ;)
-        """)
-        pass
     else:
-        click.echo(output_format)
+        output_size = len(container_details)
 
-    # Size info
-    output_size_info = (
-        "\n%s\n %d entries matched!\n%s\n"
-        %
-        ("-"*50 , output_size, "-"*50)
-    )
+        output_format = pformat(
+            container_details
+        )
 
-    click.echo(output_size_info)
+        if json == 0:
+            # print in table format
+            # Probably use Pylsy for this
+            click.echo("""
+                Better looking output comingup!
+                (Use -j option instead ;)
+            """)
+            pass
+        else:
+            click.echo(output_format)
+
+        # Size info
+        output_size_info = (
+            "\n%s\n %d entries matched!\n%s\n"
+            %
+            ("-"*50 , output_size, "-"*50)
+        )
+
+        click.echo(output_size_info)
 
 if __name__ == "__main__":
     ps_query()
