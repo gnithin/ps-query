@@ -164,30 +164,9 @@ class ps_query:
             cls.container_data
         )
 
-        qry_data = cls.__get_query_data(cls.purged_data, query)
+        qry_data = parse_sql_query.parse_query(query, data=cls.purged_data)
 
         return qry_data, True
-
-    @classmethod
-    def __get_query_data(cls, data, query):
-        '''
-        Get the required set of data as specified in the query
-
-        Parameters:
-            data
-                This is a list of dicts containing the container/image data
-            query
-                This is the query
-
-        Returns:
-            A list of dicts of `data` that follow the query criteria
-        '''
-        # Build expression tree with the query.
-        # Evaluate each dict of the data to the tree
-        # Return only those ids whose end result is true
-        filtered_data = parse_sql_query.parse_query(query, data=data)
-
-        return filtered_data
 
 if __name__ == "__main__":
     # arg_list = "l"
