@@ -18,12 +18,26 @@ from pprint import pformat
 @click.option(
     '--query', '-q',
     type=str,
+    help="The actual query inside single quotes"
 )
 @click.option(
     '--json', '-j',
-    count=True
+    count=True,
+    help="JSON output is the default now. Will change to tabular format"
 )
 def ps_query(all, latest, query, json):
+    '''
+    Example usage -
+    $ ps_query -q 'command = "/bin/bash" and image = "ubuntu"'
+    [{'Config.Cmd': [u'/bin/bash'],
+      'Config.Image': u'ubuntu',
+        'Created': u'2015-09-13T11:02:00.462203807Z',
+        ...
+        ...
+    --------------------------------------------------
+     5 entries matched!
+    --------------------------------------------------
+    '''
     l_arg = "l"
     a_arg = "a"
     arg = None
@@ -58,6 +72,8 @@ def ps_query(all, latest, query, json):
             container_details
         )
 
+        # Right now forcing json output
+        '''
         if json == 0:
             # print in table format
             # Probably use Pylsy for this
@@ -68,6 +84,8 @@ def ps_query(all, latest, query, json):
             pass
         else:
             click.echo(output_format)
+        '''
+        click.echo(output_format)
 
         # Size info
         output_size_info = (
