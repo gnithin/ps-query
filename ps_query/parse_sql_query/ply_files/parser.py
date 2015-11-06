@@ -176,7 +176,11 @@ def p_common_prod_comparision(p):
 
         # TODO: Do this better(how to do this without eval/ast_eval?)
         if optr == "=":
-            resp_val = p_utils.logic_optr_EQUALS(l_op, r_op)
+            resp_val = p_utils.logic_optr_EQUALS(
+                l_op,
+                r_op,
+                type_data=operations_list
+            )
         elif optr == "!=":
             resp_val = p_utils.logic_optr_NOT_EQUALS(l_op, r_op)
         elif optr == ">":
