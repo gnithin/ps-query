@@ -25,7 +25,9 @@ def middleware(func_name):
                 # perform datetime conversions
                 l_op, r_op = convert_datetime(l_op, r_op)
 
-        return func_name(l_op, r_op)
+            return func_name(l_op, r_op)
+
+        return func_name(*args, **kwargs)
     return callback
 
 # Functions that convert the input field values
@@ -54,6 +56,7 @@ def logic_optr_NOT_EQUALS(l_op, r_op):
     return resp_val
 
 
+@middleware
 def logic_optr_EQUALS(l_op, r_op):
     l_list_bool = type(l_op) == list
     r_list_bool = type(r_op) == list
